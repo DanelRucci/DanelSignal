@@ -42,11 +42,12 @@ Connection.__index = Connection
 --[=[
     @function Connection.new
     @within Connection
+
+    Creates a new connection instance.
+
     @param listener Listener -- The listener associated with this connection.
     @param disconnect DisconnectCallback -- A callback function that is called when the connection is disconnected.
     @return Connection -- A new connection instance.
-
-    Creates a new connection instance.
 ]=]
 function Connection.new(listener : Listener, disconnect : DisconnectCallback) : Connection
     return setmetatable({
@@ -117,9 +118,10 @@ end
 --[=[
     @function IsConnected
     @within Connection
-    @return boolean -- Whether this listener is connected.
-
+    
     Returns whether this listener is connected.
+
+    @return boolean -- Whether this listener is connected.
 ]=]
 function Connection:IsConnected() : boolean
     return self.__listener.connected
@@ -128,9 +130,10 @@ end
 --[=[
     @function IsEnabled
     @within Connection
-    @return boolean -- Whether this listener is enabled.
 
     Returns whether this listener is enabled.
+
+    @return boolean -- Whether this listener is enabled.
 ]=]
 function Connection:IsEnabled() : boolean
     return self.__listener.enabled
@@ -139,9 +142,10 @@ end
 --[=[
     @function GetPriority
     @within Connection
-    @return number -- The listener's priority.
 
     Returns this listener's priority.
+
+    @return number -- The listener's priority.
 ]=]
 function Connection:GetPriority() : number
     return self.__listener.priority
@@ -150,36 +154,39 @@ end
 --[=[
     @function GetTag
     @within Connection
-    @return string? -- The listener's tag, if one exists.
 
     Returns this listener's tag, if one exists.
+
+    @return string? -- The listener's tag, if one exists.
 ]=]
 function Connection:GetTag() : string?
     return self.__listener.tag
 end
 
 --[=[
-    @function GetContext
+    @function GetId
     @within Connection
-    @return number -- The listener's unique identifier.
 
     Returns the unique listener identifier.
     Every listener has a unique identifier that is used to identify it within the Signal.
+
+    @return number -- The listener's unique identifier.
 ]=]
 function Connection:GetId(): number
     return self.__listener.id
 end
 
 --[=[
-    @function GetListener
+    @function __get_listener
     @within Connection
-    @return Listener
     @private
-
+    
     Returns the underlying listener object.
     This is used internally by the DanelSignal class and should not be called directly.
+
+    @return Listener
 ]=]
-function Connection:GetListener() : Listener
+function Connection:__get_listener() : Listener
     return self.__listener
 end
 

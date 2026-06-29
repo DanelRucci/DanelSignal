@@ -29,15 +29,6 @@ export type ConnectionOptions = {
     enabled : boolean?,
 }
 
-export type Listener = {
-    id : number,
-    priority : number,
-    enabled : boolean,
-    tag : string?,
-    callback : Callback,
-    order : number,
-}
-
 export type DispatchContext = {
     id : number,
     signal : any,

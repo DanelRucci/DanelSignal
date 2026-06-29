@@ -4,25 +4,9 @@
 --@danel_rucci
 
 local BinarySearch = require(script.Parent.Parent.Util.BinarySearch)
-local Types = require(script.Parent.Types)
+local Listener = require(script.Parent.Listener)
 
---[=[
-    @type Listener Types.Listener
-
-    A listener is a table containing metadata and a callback function for a signal connection.
-    Listeners look like this:
-
-    ```lua
-    {
-        id = 1,
-        priority = 0,
-        enabled = true,
-        tag = "example",
-        callback = function() end,
-    }
-    ```
-]=]
-type Listener = Types.Listener
+export type Listener = Listener.Listener
 
 export type PriorityList = {
     Insert : (self : PriorityList, listener : Listener) -> (),
@@ -50,13 +34,14 @@ PriorityList.__index = PriorityList
 --[=[
     @function compare
     @within PriorityList
+
+    Compares two listeners by priority and ID, returning true if <left> should be ordered before <right>.
+
     @param left Listener -- The first listener to compare.
     @param right Listener -- The second listener to compare.
     @return boolean -- Whether <left> should be ordered before <right>.
     @yields
     @private
-
-    Compares two listeners by priority and ID, returning true if <left> should be ordered before <right>.
 ]=]
 local function compare(left : Listener, right : Listener) : boolean
     if left.priority ~= right.priority then
@@ -69,9 +54,10 @@ end
 --[=[
     @function new
     @within PriorityList
-    @return PriorityList -- A new priority list.
 
     Creates a new priority list.
+
+    @return PriorityList -- A new priority list.
 ]=]
 function PriorityList.new() : PriorityList
     return setmetatable({
@@ -83,9 +69,10 @@ end
 --[=[
     @function Insert
     @within PriorityList
-    @param listener Listener -- The listener to insert.
 
     Inserts a listener into the priority list, maintaining order.
+
+    @param listener Listener -- The listener to insert.
 ]=]
 function PriorityList:Insert(listener : Listener) : ()
     local index : number = BinarySearch.LowerBound(self.__listeners, listener, compare)
@@ -96,10 +83,11 @@ end
 --[=[
     @function Remove
     @within PriorityList
-    @param listener Listener -- The listener to remove.
-    @return boolean -- Whether the listener was found and removed.
 
     Removes a listener from the priority list.
+
+    @param listener Listener -- The listener to remove.
+    @return boolean -- Whether the listener was found and removed.
 ]=]
 function PriorityList:Remove(listener : Listener) : boolean
     local listeners : {Listener} = self.__listeners
@@ -130,9 +118,10 @@ end
 --[=[
     @function GetCount
     @within PriorityList
-    @return number -- The number of listeners in the priority list.
 
     Returns the number of listeners in the priority list.
+
+    @return number -- The number of listeners in the priority list.
 ]=]
 function PriorityList:GetCount() : number
     return self.__count
@@ -141,9 +130,10 @@ end
 --[=[
     @function ToArray
     @within PriorityList
-    @return {Listener} -- An array of listeners in the priority list.
 
     Returns a shallow copy of the listeners in the priority list.
+
+    @return {Listener} -- An array of listeners in the priority list.
 ]=]
 function PriorityList:ToArray() : {Listener}
     return table.clone(self.__listeners)
@@ -152,11 +142,12 @@ end
 --[=[
     @function Iter
     @within PriorityList
-    @return (() -> Listener?) -- An iterator function for the listeners in the priority list.
 
     Returns an iterator function for the listeners in the priority list.
+
+    @return (() -> Listener?) -- An iterator function for the listeners in the priority list.
 ]=]
-function PriorityList:Iter()
+function PriorityList:Iter() : (() -> Listener?)
     local index : number = 0
     local listeners : {Listener} = self.__listeners
     local count : number = self.__count

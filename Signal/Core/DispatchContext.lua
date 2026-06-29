@@ -33,6 +33,7 @@ export type DispatchContext = typeof(setmetatable({} :: {
     Items : {[string] : any},
     Cancelled : boolean,
     PropagationStopped : boolean,
+    ArgumentCount : number,
 }, DispatchContext))
 
 --[=[
@@ -52,6 +53,7 @@ function DispatchContext.new() : DispatchContext
         Items = {},
         Cancelled = false,
         PropagationStopped = false,
+        ArgumentCount = 0,
     }, DispatchContext)
 end
 
@@ -78,6 +80,8 @@ function DispatchContext:SetArguments(...)
     table.clear(self.Arguments)
 
     local count : number = select("#", ...)
+    self.ArgumentCount = count
+    
     for index : number = 1, count do
         self.Arguments[index] = select(index, ...)
     end
@@ -139,6 +143,7 @@ end
 function DispatchContext:Reset() : ()
     self.Id = 0
     self.Timestamp = 0
+    self.ArgumentCount = 0
 
     self.Signal = nil
     self.Connection = nil
